@@ -13,99 +13,99 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model categories {
-  id        Int       @id @default(autoincrement())
+model Categories {
+  id        Int     @id @default(autoincrement())
   shopId    Int
   printerId Int?
-  name      String    @db.VarChar(255)
+  name      String  @db.VarChar(255)
   createdBy Int?
   updatedBy Int?
-  createdAt DateTime? @default(now()) @db.Timestamp()
-  updatedAt DateTime?
-  isDeleted Boolean   @default(false)
+  createdAt Float?
+  updatedAt Float?
+  isDeleted Boolean @default(false)
 
-  shops    shops      @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "categories_ibfk_1")
-  printers printers?  @relation(fields: [printerId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "categories_ibfk_2")
-  products products[]
+  shops    Shops      @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "categories_ibfk_1")
+  printers Printers?  @relation(fields: [printerId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "categories_ibfk_2")
+  products Products[]
 
   @@unique([shopId, name], map: "check_categories_duplicate_values")
   @@index([printerId], map: "printerId")
 }
 
-model currencies {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique(map: "check_currencies_duplicate_values") @db.VarChar(255)
+model Currencies {
+  id        Int     @id @default(autoincrement())
+  name      String
+  symbol    String
   createdBy Int?
   updatedBy Int?
-  createdAt DateTime? @default(now()) @db.Timestamp()
-  updatedAt DateTime?
-  isDeleted Boolean   @default(false)
+  createdAt Float?
+  updatedAt Float?
+  isDeleted Boolean @default(false)
 
-  order_plan_transactions order_plan_transactions[]
-  rates                   rates[]
-  shops                   shops[]
-  transaction_payments    transaction_payments[]
+  orderTransactions OrderTransactions[]
+  rates             Rates[]
+  shops             Shops[]
 }
 
-model customers {
-  id        Int       @id @default(autoincrement())
+model Customers {
+  id        Int     @id @default(autoincrement())
   shopId    Int
-  name      String    @db.VarChar(255)
-  tel       String?   @db.VarChar(255)
-  email     String?   @db.VarChar(255)
+  name      String  @db.VarChar(255)
+  tel       String? @db.VarChar(255)
+  email     String? @db.VarChar(255)
   prId      Int?
   drId      Int?
   villId    Int?
   score     Int?
   createdBy Int?
   updatedBy Int?
-  createdAt DateTime? @default(now()) @db.Timestamp()
-  updatedAt DateTime?
-  isDeleted Boolean   @default(false)
+  createdAt Float?
+  updatedAt Float?
+  isDeleted Boolean @default(false)
 
-  shops        shops          @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "customers_ibfk_1")
-  transactions transactions[]
+  shops        Shops          @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "customers_ibfk_1")
+  transactions Transactions[]
 
   @@index([shopId], map: "customers_shopId_index")
 }
 
-model plans {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(255)
+model Plans {
+  id        Int     @id @default(autoincrement())
+  name      String  @db.VarChar(255)
   limitUser Int?
   limitBill Int?
   limitDay  Int?
-  price     Int       @default(0)
+  price     Int     @default(0)
   createdBy Int?
   updatedBy Int?
-  createdAt DateTime? @default(now()) @db.Timestamp()
-  updatedAt DateTime?
-  isDeleted Boolean   @default(false)
+  createdAt Float?
+  updatedAt Float?
+  isDeleted Boolean @default(false)
 
-  order_plan_transactions order_plan_transactions[]
-  order_plans             order_plans[]
+  orderTransactions OrderTransactions[]
+  orderPlans        OrderPlans[]
 }
 
-model order_plan_transactions {
-  id         Int             @id @default(autoincrement())
+model OrderTransactions {
+  id         Int            @id @default(autoincrement())
   odpId      Int
   shopId     Int
   planId     Int
   pgId       Int
   currId     Int
   price      Int
-  paymentStt payment_status? @default(pending)
+  paymentStt PaymentStatus? @default(pending)
   createdBy  Int?
   updatedBy  Int?
-  createdAt  DateTime?       @default(now()) @db.Timestamp()
-  updatedAt  DateTime?
-  isDeleted  Boolean         @default(false)
+  createdAt  Float?
+  updatedAt  Float?
+  isDeleted  Boolean        @default(false)
 
-  order_plans      order_plans      @relation(fields: [odpId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_1")
-  shops            shops            @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_2")
-  plans            plans            @relation(fields: [planId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_3")
-  payment_gateways payment_gateways @relation(fields: [pgId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_4")
-  currencies       currencies       @relation(fields: [currId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_5")
+  orderPlans      OrderPlans      @relation(fields: [odpId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_1")
+  shops           Shops           @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_2")
+  plans           Plans           @relation(fields: [planId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_3")
+  paymentGateways PaymentGateways @relation(fields: [pgId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_4")
+  currencies      Currencies      @relation(fields: [currId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_5")
 
   @@index([currId], map: "order_plan_ts_currId_index")
   @@index([odpId], map: "order_plan_ts_odpId_index")
@@ -114,212 +114,211 @@ model order_plan_transactions {
   @@index([shopId], map: "order_plan_ts_shopId_index")
 }
 
-model order_plans {
-  id        Int       @id @default(autoincrement())
+model OrderPlans {
+  id        Int     @id @default(autoincrement())
   shopId    Int
   planId    Int
-  start     DateTime
-  end       DateTime
+  start     Float
+  end       Float
   createdBy Int?
   updatedBy Int?
-  createdAt DateTime? @default(now()) @db.Timestamp()
-  updatedAt DateTime?
-  isDeleted Boolean   @default(false)
+  createdAt Float?
+  updatedAt Float?
+  isDeleted Boolean @default(false)
 
-  order_plan_transactions order_plan_transactions[]
-  shops                   shops                     @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "order_plans_ibfk_1")
-  plans                   plans                     @relation(fields: [planId], references: [id], onUpdate: Restrict, map: "order_plans_ibfk_2")
+  orderTransactions OrderTransactions[]
+  shops             Shops               @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "order_plans_ibfk_1")
+  plans             Plans               @relation(fields: [planId], references: [id], onUpdate: Restrict, map: "order_plans_ibfk_2")
 
   @@index([planId], map: "order_plans_planId_index")
   @@index([shopId], map: "order_plans_shopId_index")
 }
 
-model payment_gateways {
-  id        Int       @id @default(autoincrement())
+model PaymentGateways {
+  id        Int     @id @default(autoincrement())
   name      String
   createdBy Int?
   updatedBy Int?
-  createdAt DateTime? @default(now()) @db.Timestamp()
-  updatedAt DateTime?
-  isDeleted Boolean   @default(false)
+  createdAt Float?
+  updatedAt Float?
+  isDeleted Boolean @default(false)
 
-  order_plan_transactions order_plan_transactions[]
-  transaction_payments    transaction_payments[]
-  transactions            transactions[]
+  order_plan_transactions OrderTransactions[]
+  transactions            Transactions[]
 }
 
-model permissions {
-  id          Int       @id @default(autoincrement())
-  permission  String    @unique(map: "permission") @db.VarChar(255)
-  displayName String    @db.VarChar(255)
-  createdAt   DateTime? @default(now()) @db.Timestamp()
-  updatedAt   DateTime? @db.Timestamp()
-  isDeleted   Boolean   @default(false)
+model Permissions {
+  id          Int     @id @default(autoincrement())
+  permission  String  @unique(map: "permission") @db.VarChar(255)
+  displayName String  @db.VarChar(255)
+  createdAt   Float?
+  updatedAt   Float?
+  isDeleted   Boolean @default(false)
 
-  user_permissions user_permissions[]
+  userPermissions UserPermissions[]
 }
 
-model printers {
-  id        Int               @id @default(autoincrement())
+model Printers {
+  id        Int              @id @default(autoincrement())
   shopId    Int
-  name      String            @db.VarChar(255)
-  interface printer_interface @default(USB)
-  paperSize Int               @default(58)
-  ip        String?           @db.VarChar(255)
+  name      String           @db.VarChar(255)
+  interface PrinterInterface @default(USB)
+  paperSize Int              @default(58)
+  ip        String?          @db.VarChar(255)
   port      Int?
   createdBy Int?
   updatedBy Int?
-  createdAt DateTime?         @default(now()) @db.Timestamp()
-  updatedAt DateTime?
-  isDeleted Boolean           @default(false)
+  createdAt Float?
+  updatedAt Float?
+  isDeleted Boolean          @default(false)
 
-  categories categories[]
-  shops      shops        @relation(fields: [shopId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "printers_ibfk_1")
+  categories Categories[]
+  shops      Shops        @relation(fields: [shopId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "printers_ibfk_1")
 
   @@unique([shopId, name, interface, paperSize, ip, port], map: "check_printer_duplicate_values")
 }
 
-model products {
-  id        Int           @id @default(autoincrement())
+model Products {
+  id        Int          @id @default(autoincrement())
   shopId    Int
   catId     Int
-  name      String        @db.VarChar(255)
-  barcode   String?       @db.VarChar(255)
+  name      String       @db.VarChar(255)
+  barcode   String?      @db.VarChar(255)
   cost      Int?
-  qty       Int?          @default(0)
+  qty       Int?         @default(0)
   price     Int
-  unit      product_unit?
-  isSet     Boolean?      @default(false)
-  isCF      Boolean?      @default(false)
-  hasStock  Boolean?      @default(false)
-  pic       String?       @db.VarChar(255)
+  unit      ProductUnit?
+  isSet     Boolean?     @default(false)
+  isCF      Boolean?     @default(false)
+  hasStock  Boolean?     @default(false)
+  pic       String?      @db.VarChar(255)
   createdBy Int?
   updatedBy Int?
-  createdAt DateTime?     @default(now()) @db.Timestamp()
-  updatedAt DateTime?
-  isDeleted Boolean       @default(false)
+  createdAt Float?
+  updatedAt Float?
+  isDeleted Boolean      @default(false)
 
-  shops               shops                 @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "products_ibfk_1")
-  categories          categories            @relation(fields: [catId], references: [id], onUpdate: Restrict, map: "products_ibfk_2")
-  transaction_details transaction_details[]
+  shops              Shops                @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "products_ibfk_1")
+  categories         Categories           @relation(fields: [catId], references: [id], onUpdate: Restrict, map: "products_ibfk_2")
+  transactionDetails TransactionDetails[]
 
   @@index([catId], map: "products_catId_index")
   @@index([shopId], map: "products_shopId_index")
 }
 
-model promotions {
-  id          Int       @id @default(autoincrement())
+model Promotions {
+  id          Int     @id @default(autoincrement())
   shopId      Int
-  name        String    @db.VarChar(255)
-  code        String?   @db.VarChar(255)
+  name        String  @db.VarChar(255)
+  code        String? @db.VarChar(255)
   discount    Int
   limitAmount Int?
-  useAmount   Int?      @default(0)
-  start       DateTime? @db.DateTime(0)
-  end         DateTime? @db.DateTime(0)
+  useAmount   Int?    @default(0)
+  start       Float?
+  end         Float?
   createdBy   Int?
   updatedBy   Int?
-  createdAt   DateTime? @default(now()) @db.Timestamp()
-  updatedAt   DateTime? @db.Timestamp()
-  isDeleted   Boolean   @default(false)
+  createdAt   Float?
+  updatedAt   Float?
+  isDeleted   Boolean @default(false)
 
-  shops shops @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "promotions_ibfk_1")
+  shops Shops @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "promotions_ibfk_1")
 
   @@unique([shopId, name, code], map: "check_promotion_duplicate_values")
 }
 
-model rates {
-  id        Int       @id @default(autoincrement())
+model Rates {
+  id        Int     @id @default(autoincrement())
   rate      Int
   currId    Int
   shopId    Int
   createdBy Int?
   updatedBy Int?
-  createdAt DateTime? @default(now()) @db.Timestamp()
-  updatedAt DateTime? @db.Timestamp()
-  isDeleted Boolean   @default(false)
+  createdAt Float?
+  updatedAt Float?
+  isDeleted Boolean @default(false)
 
-  currencies currencies @relation(fields: [currId], references: [id], onUpdate: Restrict, map: "rates_ibfk_1")
-  shops      shops      @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "rates_ibfk_2")
+  currencies Currencies @relation(fields: [currId], references: [id], onUpdate: Restrict, map: "rates_ibfk_1")
+  shops      Shops      @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "rates_ibfk_2")
 
   @@index([currId], map: "rates_currId_index")
   @@index([shopId], map: "rates_shopId_index")
 }
 
-model shops {
-  id         Int            @id @default(autoincrement())
+model Shops {
+  id         Int         @id @default(autoincrement())
   uid        Int
   currId     Int
-  name       String         @db.VarChar(255)
-  tel        String?        @db.VarChar(255)
+  name       String      @db.VarChar(255)
+  tel        String?     @db.VarChar(255)
   provinceId Int
   districtId Int
   villageId  Int
-  vatType    shop_vat_type?
-  vat        Int?           @default(0)
-  shopType   shop_type      @default(shops)
-  status     shops_status   @default(pending)
-  pic        String?        @db.VarChar(255)
+  vatType    VatType?
+  vat        Int?        @default(0)
+  shopType   ShopType    @default(shops)
+  status     ShopsStatus @default(pending)
+  pic        String?     @db.VarChar(255)
   createdBy  Int?
   updatedBy  Int?
-  createdAt  DateTime?      @default(now()) @db.Timestamp()
-  updatedAt  DateTime?      @db.Timestamp()
-  isDeleted  Boolean        @default(false)
+  createdAt  Float?
+  updatedAt  Float?
+  isDeleted  Boolean     @default(false)
 
-  categories              categories[]
-  customers               customers[]
-  order_plan_transactions order_plan_transactions[]
-  order_plans             order_plans[]
-  printers                printers[]
-  products                products[]
-  promotions              promotions[]
-  rates                   rates[]
-  currencies              currencies                @relation(fields: [currId], references: [id], map: "shops_ibfk_1")
-  table_zones             table_zones[]
-  tables                  tables[]
-  transaction_details     transaction_details[]
-  transactions            transactions[]
+  categories          Categories[]
+  customers           Customers[]
+  orderTransactions   OrderTransactions[]
+  orderPlans          OrderPlans[]
+  printers            Printers[]
+  products            Products[]
+  promotions          Promotions[]
+  rates               Rates[]
+  currencies          Currencies           @relation(fields: [currId], references: [id], map: "shops_ibfk_1")
+  tableZones          TableZones[]
+  tables              Tables[]
+  transaction_details TransactionDetails[]
+  transactions        Transactions[]
 
   @@index([currId], map: "shops_currId_index")
 }
 
-model table_zones {
-  id        Int       @id @default(autoincrement())
+model TableZones {
+  id        Int     @id @default(autoincrement())
   shopId    Int
-  name      String    @db.VarChar(255)
+  name      String  @db.VarChar(255)
   createdBy Int?
   updatedBy Int?
-  createdAt DateTime? @default(now()) @db.Timestamp()
-  updatedAt DateTime? @db.Timestamp()
-  isDeleted Boolean   @default(false)
+  createdAt Float?
+  updatedAt Float?
+  isDeleted Boolean @default(false)
 
-  shops  shops    @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "table_zones_ibfk_1")
-  tables tables[]
+  shops  Shops    @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "table_zones_ibfk_1")
+  tables Tables[]
 
   @@unique([shopId, name], map: "check_duplicate_zone_values")
 }
 
-model tables {
-  id        Int       @id @default(autoincrement())
+model Tables {
+  id        Int     @id @default(autoincrement())
   shopId    Int
   zoneId    Int
-  name      String    @db.VarChar(255)
+  name      String  @db.VarChar(255)
   createdBy Int?
   updatedBy Int?
-  createdAt DateTime? @default(now()) @db.Timestamp()
-  updatedAt DateTime? @db.Timestamp()
-  isDeleted Boolean   @default(false)
+  createdAt Float?
+  updatedAt Float?
+  isDeleted Boolean @default(false)
 
-  shops        shops          @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "tables_ibfk_1")
-  table_zones  table_zones    @relation(fields: [zoneId], references: [id], onUpdate: Restrict, map: "tables_ibfk_2")
-  transactions transactions[]
+  shops        Shops          @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "tables_ibfk_1")
+  table_zones  TableZones     @relation(fields: [zoneId], references: [id], onUpdate: Restrict, map: "tables_ibfk_2")
+  transactions Transactions[]
 
   @@unique([shopId, zoneId, name], map: "table_check_duplicate_values")
   @@index([zoneId], map: "tables_zoneId_index")
 }
 
-model transaction_details {
-  id         Int             @id @default(autoincrement())
+model TransactionDetails {
+  id         Int            @id @default(autoincrement())
   shopId     Int
   tsId       Int
   proId      Int
@@ -329,54 +328,33 @@ model transaction_details {
   discount   Int?
   disVal     Int?
   total      Int
-  printStt   print_status?
-  paymentStt payment_status?
-  comment    String?         @db.VarChar(255)
+  printStt   PrintStatus?
+  paymentStt PaymentStatus?
+  comment    String?        @db.VarChar(255)
   createdBy  Int?
   updatedBy  Int?
-  createdAt  DateTime?       @default(now()) @db.Timestamp()
-  updatedAt  DateTime?       @db.Timestamp()
-  isDeleted  Boolean         @default(false)
+  createdAt  Float?
+  updatedAt  Float?
+  isDeleted  Boolean        @default(false)
 
-  shops        shops        @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "transaction_details_ibfk_1")
-  transactions transactions @relation(fields: [tsId], references: [id], onUpdate: Restrict, map: "transaction_details_ibfk_2")
-  products     products     @relation(fields: [proId], references: [id], onUpdate: Restrict, map: "transaction_details_ibfk_3")
+  shops        Shops        @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "transaction_details_ibfk_1")
+  transactions Transactions @relation(fields: [tsId], references: [id], onUpdate: Restrict, map: "transaction_details_ibfk_2")
+  products     Products     @relation(fields: [proId], references: [id], onUpdate: Restrict, map: "transaction_details_ibfk_3")
 
   @@index([proId], map: "ts_details_proId_index")
   @@index([shopId], map: "ts_details_shopId_index")
   @@index([tsId], map: "ts_details_tsId_index")
 }
 
-model transaction_payments {
-  id        Int       @id @default(autoincrement())
-  tsId      Int
-  currId    Int
-  pgId      Int
-  rate      Int?
-  total     Int
-  createdBy Int?
-  updatedBy Int?
-  createdAt DateTime? @default(now()) @db.Timestamp()
-  updatedAt DateTime? @db.Timestamp()
-  isDeleted Boolean   @default(false)
-
-  transactions     transactions     @relation(fields: [tsId], references: [id], onUpdate: Restrict, map: "transaction_payments_ibfk_1")
-  currencies       currencies       @relation(fields: [currId], references: [id], onUpdate: Restrict, map: "transaction_payments_ibfk_2")
-  payment_gateways payment_gateways @relation(fields: [pgId], references: [id], onUpdate: Restrict, map: "transaction_payments_ibfk_3")
-
-  @@index([currId], map: "ts_payments_currId_index")
-  @@index([pgId], map: "ts_payments_pgId_index")
-  @@index([tsId], map: "ts_payments_tsId_index")
-}
-
-model transactions {
-  id         Int              @id @default(autoincrement())
+model Transactions {
+  id         Int             @id @default(autoincrement())
   shopId     Int
   pgId       Int
+  currId     Int
   tableId    Int
   cusId      Int?
   promoId    Int?
-  billNumber String           @db.VarChar(255)
+  billNumber String          @db.VarChar(255)
   subTotal   Int
   discount   Int?
   disVal     Int?
@@ -388,22 +366,22 @@ model transactions {
   moneyRecv  Int?
   moneyChg   Int?
   people     Int?
-  printStt   print_status?    @default(pending)
-  paymentStt payment_status?  @default(pending)
-  tsType     transaction_type
-  comment    String?          @db.VarChar(255)
+  rate       Int?
+  printStt   PrintStatus?    @default(pending)
+  paymentStt PaymentStatus?  @default(pending)
+  tsType     TransactionType
+  comment    String?         @db.VarChar(255)
   createdBy  Int?
   updatedBy  Int?
-  createdAt  DateTime?        @default(now()) @db.Timestamp()
-  updatedAt  DateTime?        @db.Timestamp()
-  isDeleted  Boolean          @default(false)
+  createdAt  Float?
+  updatedAt  Float?
+  isDeleted  Boolean         @default(false)
 
-  transaction_details  transaction_details[]
-  transaction_payments transaction_payments[]
-  shops                shops                  @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "transactions_ibfk_1")
-  payment_gateways     payment_gateways       @relation(fields: [pgId], references: [id], onUpdate: Restrict, map: "transactions_ibfk_2")
-  tables               tables                 @relation(fields: [tableId], references: [id], onUpdate: Restrict, map: "transactions_ibfk_3")
-  customers            customers?             @relation(fields: [promoId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "transactions_ibfk_4")
+  transactionDetails TransactionDetails[]
+  shops              Shops                @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "transactions_ibfk_1")
+  paymentGateways    PaymentGateways      @relation(fields: [pgId], references: [id], onUpdate: Restrict, map: "transactions_ibfk_2")
+  tables             Tables               @relation(fields: [tableId], references: [id], onUpdate: Restrict, map: "transactions_ibfk_3")
+  customers          Customers?           @relation(fields: [promoId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "transactions_ibfk_4")
 
   @@index([pgId], map: "ts_pgId_index")
   @@index([promoId], map: "ts_promoId_index")
@@ -412,67 +390,67 @@ model transactions {
 }
 
 // The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model user_permissions {
-  id        Int       @id @default(autoincrement())
+model UserPermissions {
+  id        Int     @id @default(autoincrement())
   uid       Int
   permisId  Int
-  createdAt DateTime? @default(now()) @db.Timestamp()
-  updatedAt DateTime? @db.Timestamp()
-  isDeleted Boolean   @default(false)
+  createdAt Float?
+  updatedAt Float?
+  isDeleted Boolean @default(false)
 
-  permissions permissions @relation(fields: [permisId], references: [id], onDelete: Cascade, map: "user_permissions_ibfk_2")
+  permissions Permissions @relation(fields: [permisId], references: [id], onDelete: Cascade, map: "user_permissions_ibfk_2")
 
   @@index([permisId], map: "user_permissions_permisId_index")
   @@index([uid], map: "user_permissions_uid_index")
 }
 
-model language {
-  lang_id   Int       @id @default(autoincrement())
-  language  String?   @db.VarChar(255)
-  createdAt DateTime? @default(now()) @db.Timestamp()
-  updatedAt DateTime? @db.Timestamp()
-  isDeleted Boolean   @default(false)
+model Languages {
+  id        Int     @id @default(autoincrement())
+  language  String? @db.VarChar(255)
+  createdAt Float?
+  updatedAt Float?
+  isDeleted Boolean @default(false)
 }
 
-enum printer_interface {
+enum PrinterInterface {
   USB
   Ethernet
   Blutooh
 }
 
-enum shop_vat_type {
+enum VatType {
   IN
   EXC
 }
 
-enum product_unit {
+enum ProductUnit {
   wight
   entch
 }
 
-enum shop_type {
+enum ShopType {
   shops
   restaurant
 }
 
-enum shops_status {
+enum ShopsStatus {
   pending
   verified
   stop
 }
 
-enum print_status {
+enum PrintStatus {
   pending
   complete
 }
 
-enum payment_status {
+enum PaymentStatus {
   pending
   success
   cancel
 }
 
-enum transaction_type {
+enum TransactionType {
   income
   expen
 }

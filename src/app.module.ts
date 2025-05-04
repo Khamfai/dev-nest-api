@@ -1,12 +1,34 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CategorieController } from './categorie/categorie.controller';
-import { CategorieModule } from './categorie/categorie.module';
+import { ConfigModule } from '@nestjs/config';
+import { PrismaModule } from 'nestjs-prisma';
+import { CategoriesController } from './categories/categories.controller';
+import { CategoriesService } from './categories/categories.service';
+import { CategoriesModule } from './categories/categories.module';
+import { PermissionsModule } from './permissions/permissions.module';
+import { CurrenciesModule } from './currencies/currencies.module';
+import { PaymentGatewaysModule } from './payment-gateways/payment-gateways.module';
+import { PlansModule } from './plans/plans.module';
+import { ShopsModule } from './shops/shops.module';
 
 @Module({
-  imports: [CategorieModule],
-  controllers: [AppController, CategorieController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule.forRoot({
+      isGlobal: true,
+      prismaServiceOptions: {
+        prismaOptions: { log: ['query', 'info', 'warn', 'error'] },
+      },
+    }),
+    CategoriesModule,
+    PermissionsModule,
+    CurrenciesModule,
+    PaymentGatewaysModule,
+    PlansModule,
+    ShopsModule,
+  ],
+  controllers: [AppController, CategoriesController],
+  providers: [AppService, CategoriesService],
 })
 export class AppModule {}
