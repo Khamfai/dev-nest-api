@@ -11,6 +11,11 @@ import { CurrenciesModule } from './currencies/currencies.module';
 import { PaymentGatewaysModule } from './payment-gateways/payment-gateways.module';
 import { PlansModule } from './plans/plans.module';
 import { ShopsModule } from './shops/shops.module';
+import { UserPermissionsModule } from './user-permissions/user-permissions.module';
+import { LanguagesModule } from './languages/languages.module';
+import { PrintersModule } from './printers/printers.module';
+import { OrderPlansModule } from './order-plans/order-plans.module';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -27,6 +32,11 @@ import { ShopsModule } from './shops/shops.module';
     PaymentGatewaysModule,
     PlansModule,
     ShopsModule,
+    UserPermissionsModule,
+    LanguagesModule,
+    PrintersModule,
+    OrderPlansModule,
+    ProductsModule,
   ],
   controllers: [AppController, CategoriesController],
   providers: [AppService, CategoriesService],

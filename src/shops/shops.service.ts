@@ -1,26 +1,44 @@
 import { Injectable } from '@nestjs/common';
-import { CreateShopDto } from './dto/shop.dto';
-import { UpdateShopDto } from './dto/update-shop.dto';
+import { CreateShopDto, UpdateShopDto } from './dto/shop.dto';
+import { PrismaService } from 'nestjs-prisma';
+import { PaginationDto } from 'src/dto/pagination.dto';
+import { pageOffset } from 'src/utils/offset.util';
+import { Shops } from '@prisma/client';
 
 @Injectable()
 export class ShopsService {
-  create(createShopDto: CreateShopDto) {
-    return 'This action adds a new shop';
+  constructor(private client: PrismaService) {}
+
+  async create(data: CreateShopDto): Promise<Shops> {
+    return this.client.shops.create({
+      data: { ...data, createdAt: Date.now() },
+    });
   }
 
-  findAll() {
-    return `This action returns all shops`;
+  async findAll(params?: PaginationDto): Promise<Shops[]> {
+    const skip = pageOffset(params);
+    return this.client.shops.findMany({
+      where: { isDeleted: false },
+      skip,
+      take: params?.limit,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} shop`;
+  async findOne(id: number): Promise<Shops | null> {
+    return this.client.shops.findUnique({ where: { id } });
   }
 
-  update(id: number, updateShopDto: UpdateShopDto) {
-    return `This action updates a #${id} shop`;
+  async update(id: number, data: UpdateShopDto): Promise<Shops> {
+    return this.client.shops.update({
+      data: { ...data, updatedAt: Date.now() },
+      where: { id },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} shop`;
+  async remove(id: number): Promise<Shops> {
+    return this.client.shops.update({
+      data: { isDeleted: true, updatedAt: Date.now() },
+      where: { id },
+    });
   }
 }

@@ -13,6 +13,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Languages {
+  id        Int     @id @default(autoincrement())
+  language  String  @db.VarChar(255)
+  locale    String  @unique
+  createdAt Float?
+  updatedAt Float?
+  isDeleted Boolean @default(false)
+}
+
 model Categories {
   id        Int     @id @default(autoincrement())
   shopId    Int
@@ -91,10 +100,10 @@ model OrderTransactions {
   odpId      Int
   shopId     Int
   planId     Int
-  pgId       Int
+  paymentId  Int
   currId     Int
   price      Int
-  paymentStt PaymentStatus? @default(pending)
+  paymentStt PaymentStatus? @default(test)
   createdBy  Int?
   updatedBy  Int?
   createdAt  Float?
@@ -104,12 +113,12 @@ model OrderTransactions {
   orderPlans      OrderPlans      @relation(fields: [odpId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_1")
   shops           Shops           @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_2")
   plans           Plans           @relation(fields: [planId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_3")
-  paymentGateways PaymentGateways @relation(fields: [pgId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_4")
+  paymentGateways PaymentGateways @relation(fields: [paymentId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_4")
   currencies      Currencies      @relation(fields: [currId], references: [id], onUpdate: Restrict, map: "order_plan_transactions_ibfk_5")
 
   @@index([currId], map: "order_plan_ts_currId_index")
   @@index([odpId], map: "order_plan_ts_odpId_index")
-  @@index([pgId], map: "order_plan_ts_pgId_index")
+  @@index([paymentId], map: "order_plan_ts_paymentId_index")
   @@index([planId], map: "order_plan_ts_planId_index")
   @@index([shopId], map: "order_plan_ts_shopId_index")
 }
@@ -130,6 +139,7 @@ model OrderPlans {
   shops             Shops               @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "order_plans_ibfk_1")
   plans             Plans               @relation(fields: [planId], references: [id], onUpdate: Restrict, map: "order_plans_ibfk_2")
 
+  @@index([shopId, isDeleted])
   @@index([planId], map: "order_plans_planId_index")
   @@index([shopId], map: "order_plans_shopId_index")
 }
@@ -185,12 +195,10 @@ model Products {
   name      String       @db.VarChar(255)
   barcode   String?      @db.VarChar(255)
   cost      Int?
-  qty       Int?         @default(0)
   price     Int
   unit      ProductUnit?
   isSet     Boolean?     @default(false)
   isCF      Boolean?     @default(false)
-  hasStock  Boolean?     @default(false)
   pic       String?      @db.VarChar(255)
   createdBy Int?
   updatedBy Int?
@@ -201,9 +209,25 @@ model Products {
   shops              Shops                @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "products_ibfk_1")
   categories         Categories           @relation(fields: [catId], references: [id], onUpdate: Restrict, map: "products_ibfk_2")
   transactionDetails TransactionDetails[]
+  stocks             Stocks[]
 
   @@index([catId], map: "products_catId_index")
   @@index([shopId], map: "products_shopId_index")
+}
+
+model Stocks {
+  id        Int      @id @default(autoincrement())
+  prodId    Int
+  qty       Int
+  remaining Int      @default(0)
+  expDate   Float?
+  createdBy Int?
+  updatedBy Int?
+  createdAt Float?
+  updatedAt Float?
+  isDeleted Boolean? @default(false)
+
+  products Products @relation(fields: [prodId], references: [id])
 }
 
 model Promotions {
@@ -278,6 +302,7 @@ model Shops {
   tables              Tables[]
   transaction_details TransactionDetails[]
   transactions        Transactions[]
+  UserPermissions     UserPermissions[]
 
   @@index([currId], map: "shops_currId_index")
 }
@@ -389,27 +414,20 @@ model Transactions {
   @@index([tableId], map: "ts_tableId_index")
 }
 
-// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model UserPermissions {
   id        Int     @id @default(autoincrement())
   uid       Int
+  shopId    Int
   permisId  Int
   createdAt Float?
   updatedAt Float?
   isDeleted Boolean @default(false)
 
+  shops       Shops       @relation(fields: [shopId], references: [id])
   permissions Permissions @relation(fields: [permisId], references: [id], onDelete: Cascade, map: "user_permissions_ibfk_2")
 
   @@index([permisId], map: "user_permissions_permisId_index")
   @@index([uid], map: "user_permissions_uid_index")
-}
-
-model Languages {
-  id        Int     @id @default(autoincrement())
-  language  String? @db.VarChar(255)
-  createdAt Float?
-  updatedAt Float?
-  isDeleted Boolean @default(false)
 }
 
 enum PrinterInterface {
@@ -445,6 +463,7 @@ enum PrintStatus {
 }
 
 enum PaymentStatus {
+  test
   pending
   success
   cancel

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Categories } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { PaginationDto } from 'src/dto/pagination.dto';
-import { CRUD } from 'src/interfaces/crud';
+import { CRUD } from 'src/interfaces/crud.interface';
 import { pageOffset } from 'src/utils/offset.util';
 import { CreateCategoriesDto, UpdateCategoriesDto } from './dto/categories.dto';
 
@@ -14,21 +14,14 @@ export class CategoriesService implements CRUD<Categories> {
     return total;
   }
 
-  async findAll(param?: PaginationDto): Promise<Categories[]> {
+  async findAll(shopId: number, param?: PaginationDto): Promise<Categories[]> {
     const skip = pageOffset(param);
     const data = this.client.categories.findMany({
-      where: { isDeleted: false },
+      where: { shopId, isDeleted: false },
       skip,
       take: param?.limit,
     });
     return data;
-  }
-
-  async findByShop(shopId: number): Promise<Categories[]> {
-    const result = this.client.categories.findMany({
-      where: { shopId: shopId },
-    });
-    return result;
   }
 
   async findOne(id: number): Promise<Categories | null> {

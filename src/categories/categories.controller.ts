@@ -14,21 +14,18 @@ import {
   CreateCategoriesDto,
   UpdateCategoriesDto,
 } from 'src/categories/dto/categories.dto';
+import { CurrentUser } from 'src/decorator/user.decorator';
+import { User } from 'src/interfaces/user.interface';
 
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Get()
-  findAllCategories(@Query() params: PaginationDto) {
+  findAllCategories(@CurrentUser() user: User, @Query() params: PaginationDto) {
     const total = this.categoriesService.count();
-    const data = this.categoriesService.findAll(params);
+    const data = this.categoriesService.findAll(user.shopId, params);
     return { total, data };
-  }
-
-  @Get('/shop/:shopId')
-  findCategoriesByShop(@Param('shopId') shopId: string) {
-    return this.categoriesService.findByShop(+shopId);
   }
 
   @Get(':id')

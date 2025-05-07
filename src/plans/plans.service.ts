@@ -4,7 +4,6 @@ import { Plans } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { PaginationDto } from 'src/dto/pagination.dto';
 import { pageOffset } from 'src/utils/offset.util';
-import { take } from 'rxjs';
 
 @Injectable()
 export class PlansService {
