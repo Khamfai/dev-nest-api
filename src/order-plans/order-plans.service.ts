@@ -8,10 +8,10 @@ import { OrderPlans } from '@prisma/client';
 export class OrderPlansService {
   constructor(private client: PrismaService) {}
 
-  create(
+  async create(
     orderPlanData: CreateOrderPlanDto,
     transactionData: CreateOrderTransactionDto,
-  ) {
+  ): Promise<OrderPlans> {
     return this.client.orderPlans.create({
       data: {
         ...orderPlanData,
@@ -26,7 +26,13 @@ export class OrderPlansService {
     });
   }
 
-  findAll(shopId: number) {
+  async count(shopId: number): Promise<number> {
+    return this.client.orderPlans.count({
+      where: { shopId, isDeleted: false },
+    });
+  }
+
+  async findAll(shopId: number): Promise<OrderPlans[]> {
     return this.client.orderPlans.findMany({
       include: {
         orderTransactions: {
@@ -53,14 +59,14 @@ export class OrderPlansService {
     return orderPlan;
   }
 
-  update(id: number, data: UpdateOrderPlanDto) {
+  async update(id: number, data: UpdateOrderPlanDto): Promise<OrderPlans> {
     return this.client.orderPlans.update({
       data: { ...data, updatedAt: Date.now() },
       where: { id },
     });
   }
 
-  remove(id: number) {
+  async remove(id: number): Promise<OrderPlans> {
     return this.client.orderPlans.update({
       data: { isDeleted: true, updatedAt: Date.now() },
       where: { id },

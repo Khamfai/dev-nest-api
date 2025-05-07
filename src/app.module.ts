@@ -16,6 +16,10 @@ import { LanguagesModule } from './languages/languages.module';
 import { PrintersModule } from './printers/printers.module';
 import { OrderPlansModule } from './order-plans/order-plans.module';
 import { ProductsModule } from './products/products.module';
+import { StocksModule } from './stocks/stocks.module';
+import { CustomersModule } from './customers/customers.module';
+import { TablesModule } from './tables/tables.module';
+import { TableZonesModule } from './table-zones/table-zones.module';
 
 @Module({
   imports: [
@@ -37,6 +41,10 @@ import { ProductsModule } from './products/products.module';
     PrintersModule,
     OrderPlansModule,
     ProductsModule,
+    StocksModule,
+    CustomersModule,
+    TablesModule,
+    TableZonesModule,
   ],
   controllers: [AppController, CategoriesController],
   providers: [AppService, CategoriesService],

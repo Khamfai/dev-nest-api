@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { UserPermissionsService } from './user-permissions.service';
 import {
@@ -14,6 +15,7 @@ import {
 } from './dto/create-user-permission.dto';
 import { CurrentUser } from 'src/decorator/user.decorator';
 import { User } from 'src/interfaces/user.interface';
+import { PaginationDto } from 'src/dto/pagination.dto';
 @Controller('user-permissions')
 export class UserPermissionsController {
   constructor(
@@ -26,8 +28,11 @@ export class UserPermissionsController {
   }
 
   @Get()
-  findAll(@CurrentUser() user: User) {
-    return this.userPermissionsService.findAll(user.shopId);
+  findAll(@CurrentUser() user: User, @Query() query?: PaginationDto) {
+    const total = this.userPermissionsService.count(user.shopId);
+    const data = this.userPermissionsService.findAll(user.shopId, query);
+
+    return { total, data };
   }
 
   @Get(':id')

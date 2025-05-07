@@ -27,7 +27,10 @@ export class OrderPlansController {
 
   @Get()
   findAll(@CurrentUser() user: User) {
-    return this.orderPlansService.findAll(+user.shopId);
+    const total = this.orderPlansService.count(user.shopId);
+    const data = this.orderPlansService.findAll(+user.shopId);
+
+    return { total, data };
   }
 
   @Get(':id')

@@ -21,7 +21,10 @@ export class PlansController {
 
   @Get()
   findAll() {
-    return this.plansService.findAll();
+    const total = this.plansService.count();
+    const data = this.plansService.findAll();
+
+    return { total, data };
   }
 
   @Get(':id')

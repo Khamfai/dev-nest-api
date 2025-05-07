@@ -25,7 +25,10 @@ export class ProductsController {
 
   @Get()
   findAll(@CurrentUser() user: User, @Query() query: PaginationDto) {
-    return this.productsService.findAll(user.shopId, query);
+    const total = this.productsService.count(user.shopId);
+    const data = this.productsService.findAll(user.shopId, query);
+
+    return { total, data };
   }
 
   @Get(':id')

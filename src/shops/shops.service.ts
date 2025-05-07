@@ -15,6 +15,12 @@ export class ShopsService {
     });
   }
 
+  async count(): Promise<number> {
+    return this.client.shops.count({
+      where: { isDeleted: false },
+    });
+  }
+
   async findAll(params?: PaginationDto): Promise<Shops[]> {
     const skip = pageOffset(params);
     return this.client.shops.findMany({

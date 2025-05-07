@@ -217,6 +217,7 @@ model Products {
 
 model Stocks {
   id        Int      @id @default(autoincrement())
+  shopId    Int
   prodId    Int
   qty       Int
   remaining Int      @default(0)
@@ -310,7 +311,7 @@ model Shops {
 model TableZones {
   id        Int     @id @default(autoincrement())
   shopId    Int
-  name      String  @db.VarChar(255)
+  zone      String  @db.VarChar(255)
   createdBy Int?
   updatedBy Int?
   createdAt Float?
@@ -320,14 +321,14 @@ model TableZones {
   shops  Shops    @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "table_zones_ibfk_1")
   tables Tables[]
 
-  @@unique([shopId, name], map: "check_duplicate_zone_values")
+  @@unique([shopId, zone, isDeleted], map: "check_duplicate_zone_values")
 }
 
 model Tables {
   id        Int     @id @default(autoincrement())
   shopId    Int
   zoneId    Int
-  name      String  @db.VarChar(255)
+  tNumber   String  @db.VarChar(255)
   createdBy Int?
   updatedBy Int?
   createdAt Float?
@@ -338,7 +339,7 @@ model Tables {
   table_zones  TableZones     @relation(fields: [zoneId], references: [id], onUpdate: Restrict, map: "tables_ibfk_2")
   transactions Transactions[]
 
-  @@unique([shopId, zoneId, name], map: "table_check_duplicate_values")
+  @@unique([shopId, zoneId, tNumber, isDeleted], map: "table_check_duplicate_values")
   @@index([zoneId], map: "tables_zoneId_index")
 }
 
@@ -374,9 +375,9 @@ model TransactionDetails {
 model Transactions {
   id         Int             @id @default(autoincrement())
   shopId     Int
-  pgId       Int
+  paymentId  Int
   currId     Int
-  tableId    Int
+  tableId    Int?
   cusId      Int?
   promoId    Int?
   billNumber String          @db.VarChar(255)
@@ -404,11 +405,11 @@ model Transactions {
 
   transactionDetails TransactionDetails[]
   shops              Shops                @relation(fields: [shopId], references: [id], onUpdate: Restrict, map: "transactions_ibfk_1")
-  paymentGateways    PaymentGateways      @relation(fields: [pgId], references: [id], onUpdate: Restrict, map: "transactions_ibfk_2")
-  tables             Tables               @relation(fields: [tableId], references: [id], onUpdate: Restrict, map: "transactions_ibfk_3")
+  paymentGateways    PaymentGateways      @relation(fields: [paymentId], references: [id], onUpdate: Restrict, map: "transactions_ibfk_2")
+  tables             Tables?              @relation(fields: [tableId], references: [id], onUpdate: Restrict, map: "transactions_ibfk_3")
   customers          Customers?           @relation(fields: [promoId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "transactions_ibfk_4")
 
-  @@index([pgId], map: "ts_pgId_index")
+  @@index([paymentId], map: "ts_paymentId_index")
   @@index([promoId], map: "ts_promoId_index")
   @@index([shopId], map: "ts_shopId_index")
   @@index([tableId], map: "ts_tableId_index")

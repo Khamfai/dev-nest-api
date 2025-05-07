@@ -21,7 +21,9 @@ export class ShopsController {
 
   @Get()
   findAll() {
-    return this.shopsService.findAll();
+    const total = this.shopsService.count();
+    const data = this.shopsService.findAll();
+    return { total, data };
   }
 
   @Get(':id')

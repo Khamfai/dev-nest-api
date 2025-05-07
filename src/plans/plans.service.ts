@@ -15,6 +15,10 @@ export class PlansService {
     });
   }
 
+  async count(): Promise<number> {
+    return this.client.plans.count({ where: { isDeleted: false } });
+  }
+
   async findAll(params?: PaginationDto): Promise<Plans[]> {
     const skip = pageOffset(params);
     return this.client.plans.findMany({

@@ -6,6 +6,8 @@ import {
 import { PrismaService } from 'nestjs-prisma';
 import { UserPermissions } from '@prisma/client';
 import { CRUD } from 'src/interfaces/crud.interface';
+import { PaginationDto } from 'src/dto/pagination.dto';
+import { pageOffset } from 'src/utils/offset.util';
 
 @Injectable()
 export class UserPermissionsService implements CRUD<UserPermissions> {
@@ -22,9 +24,15 @@ export class UserPermissionsService implements CRUD<UserPermissions> {
     });
   }
 
-  async findAll(shopId: number): Promise<UserPermissions[]> {
+  async findAll(
+    shopId: number,
+    params?: PaginationDto,
+  ): Promise<UserPermissions[]> {
+    const skip = pageOffset(params);
     return this.client.userPermissions.findMany({
       where: { shopId, isDeleted: false },
+      skip,
+      take: params?.limit,
     });
   }
 
