@@ -15,6 +15,10 @@ export class StocksService implements CRUD<Stocks> {
   }
 
   async create(data: CreateStockDto): Promise<Stocks> {
+    await this.client.products.update({
+      data: { hasStock: true },
+      where: { id: data.prodId },
+    });
     return this.client.stocks.create({
       data: { ...data, createdAt: Date.now() },
     });

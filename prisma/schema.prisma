@@ -197,6 +197,7 @@ model Products {
   cost      Int?
   price     Int
   unit      ProductUnit?
+  hasStock  Boolean      @default(false)
   isSet     Boolean?     @default(false)
   isCF      Boolean?     @default(false)
   pic       String?      @db.VarChar(255)
@@ -380,7 +381,7 @@ model Transactions {
   tableId    Int?
   cusId      Int?
   promoId    Int?
-  billNumber String          @db.VarChar(255)
+  billNo     String          @db.VarChar(255)
   subTotal   Int
   discount   Int?
   disVal     Int?

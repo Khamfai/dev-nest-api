@@ -17,13 +17,6 @@ export class CreateTableZoneDto {
 }
 
 export class UpdateTableZoneDto extends PartialType(CreateTableZoneDto) {
-  @IsNotEmpty()
-  zone?: string;
-
-  @IsNumber()
-  @IsNotEmpty()
-  shopId?: number;
-
   @IsNumber()
   @IsOptional()
   updatedBy?: number;

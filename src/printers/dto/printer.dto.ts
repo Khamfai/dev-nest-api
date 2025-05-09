@@ -41,29 +41,5 @@ export class CreatePrinterDto {
 export class UpdatePrinterDto extends PartialType(CreatePrinterDto) {
   @IsNumber()
   @IsOptional()
-  name?: string;
-
-  @IsNumber()
-  @IsOptional()
-  shopId?: number;
-
-  @IsEnum($Enums.PrinterInterface)
-  @IsOptional()
-  interface?: $Enums.PrinterInterface;
-
-  @IsNumber()
-  @IsOptional()
-  paperSize?: number;
-
-  @IsString()
-  @IsOptional()
-  ip?: string;
-
-  @IsNumber()
-  @IsOptional()
-  port?: number;
-
-  @IsNumber()
-  @IsOptional()
   updatedBy?: number;
 }

@@ -16,14 +16,6 @@ export class CreateCurrencyDto {
 }
 
 export class UpdateCurrencyDto extends PartialType(CreateCurrencyDto) {
-  @IsString()
-  @IsOptional()
-  name?: string;
-
-  @IsString()
-  @IsOptional()
-  symbol?: string;
-
   @IsNumber()
   @IsOptional()
   updatedBy?: number;

@@ -20,18 +20,6 @@ export class CreateTableDto {
 }
 
 export class UpdateTableDto extends PartialType(CreateTableDto) {
-  @IsString()
-  @IsOptional()
-  tNumber?: string;
-
-  @IsNumber()
-  @IsOptional()
-  shopId?: number;
-
-  @IsNumber()
-  @IsOptional()
-  zoneId?: number;
-
   @IsNumber()
   @IsOptional()
   updatedBy?: number;

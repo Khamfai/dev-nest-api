@@ -29,26 +29,6 @@ export class CreatePlanDto {
 }
 
 export class UpdatePlanDto extends PartialType(CreatePlanDto) {
-  @IsString()
-  @IsOptional()
-  name?: string;
-
-  @IsNumber()
-  @IsOptional()
-  limitUser?: number;
-
-  @IsNumber()
-  @IsOptional()
-  limitBill?: number;
-
-  @IsNumber()
-  @IsOptional()
-  limitDay?: number;
-
-  @IsNumber()
-  @IsOptional()
-  price?: number;
-
   @IsNumber()
   @IsOptional()
   updatedBy?: number;

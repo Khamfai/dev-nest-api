@@ -27,14 +27,6 @@ export class CreateCategoriesDto {
 
 export class UpdateCategoriesDto extends PartialType(CreateCategoriesDto) {
   @IsNumber()
-  @IsEmpty()
-  printerId?: number;
-
-  @IsString()
-  @IsEmpty()
-  name?: string;
-
-  @IsNumber()
   @IsOptional()
   updatedBy?: number;
 }

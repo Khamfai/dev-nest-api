@@ -16,14 +16,6 @@ export class CreatePermissionDto {
 }
 
 export class UpdatePermissionDto extends PartialType(CreatePermissionDto) {
-  @IsString()
-  @IsOptional()
-  permission?: string;
-
-  @IsString()
-  @IsOptional()
-  displayName?: string;
-
   @IsNumber()
   @IsOptional()
   updatedBy?: number;

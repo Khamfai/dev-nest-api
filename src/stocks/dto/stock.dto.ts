@@ -26,26 +26,12 @@ export class CreateStockDto {
   @IsOptional()
   createdBy?: number;
 
-  updatedBy: number | null;
+  @IsNumber()
+  @IsOptional()
+  createdAt?: number;
 }
 
 export class UpdateStockDto extends PartialType(CreateStockDto) {
-  @IsNumber()
-  @IsOptional()
-  prodId?: number;
-
-  @IsNumber()
-  @IsOptional()
-  qty?: number;
-
-  @IsNumber()
-  @IsOptional()
-  remaining?: number;
-
-  @IsNumber()
-  @IsOptional()
-  expDate?: number;
-
   @IsNumber()
   @IsOptional()
   updatedBy?: number;

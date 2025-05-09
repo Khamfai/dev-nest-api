@@ -20,6 +20,8 @@ import { StocksModule } from './stocks/stocks.module';
 import { CustomersModule } from './customers/customers.module';
 import { TablesModule } from './tables/tables.module';
 import { TableZonesModule } from './table-zones/table-zones.module';
+import { TransactionsModule } from './transactions/transactions.module';
+import { TransactionDetailsModule } from './transaction-details/transaction-details.module';
 
 @Module({
   imports: [
@@ -45,6 +47,8 @@ import { TableZonesModule } from './table-zones/table-zones.module';
     CustomersModule,
     TablesModule,
     TableZonesModule,
+    TransactionsModule,
+    TransactionDetailsModule,
   ],
   controllers: [AppController, CategoriesController],
   providers: [AppService, CategoriesService],

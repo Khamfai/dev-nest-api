@@ -26,22 +26,6 @@ export class CreateOrderPlanDto {
 
 export class UpdateOrderPlanDto extends PartialType(CreateOrderPlanDto) {
   @IsNumber()
-  @IsNotEmpty()
-  shopId: number;
-
-  @IsNumber()
-  @IsOptional()
-  planId?: number;
-
-  @IsNumber()
-  @IsOptional()
-  start?: number;
-
-  @IsNumber()
-  @IsOptional()
-  end?: number;
-
-  @IsNumber()
   @IsOptional()
   updatedBy?: number;
 }

@@ -15,10 +15,6 @@ export class CreatePaymentGatewayDto {
 export class UpdatePaymentGatewayDto extends PartialType(
   CreatePaymentGatewayDto,
 ) {
-  @IsString()
-  @IsNotEmpty()
-  name: string;
-
   @IsNumber()
   @IsOptional()
   updatedBy: number | null;

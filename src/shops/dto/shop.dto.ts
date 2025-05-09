@@ -63,54 +63,6 @@ export class CreateShopDto {
 }
 
 export class UpdateShopDto extends PartialType(CreateShopDto) {
-  @IsString()
-  @IsOptional()
-  name: string;
-
-  @IsNumber()
-  @IsOptional()
-  uid: number;
-
-  @IsNumber()
-  @IsOptional()
-  currId: number;
-
-  @IsString()
-  @IsOptional()
-  tel: string | null;
-
-  @IsNumber()
-  @IsOptional()
-  provinceId: number;
-
-  @IsNumber()
-  @IsOptional()
-  districtId: number;
-
-  @IsNumber()
-  @IsOptional()
-  villageId: number;
-
-  @IsEnum($Enums.VatType)
-  @IsOptional()
-  vatType?: $Enums.VatType;
-
-  @IsNumber()
-  @IsOptional()
-  vat?: number;
-
-  @IsEnum($Enums.ShopType)
-  @IsOptional()
-  shopType: $Enums.ShopType;
-
-  @IsEnum($Enums.ShopsStatus)
-  @IsOptional()
-  status?: $Enums.ShopsStatus;
-
-  @IsString()
-  @IsOptional()
-  pic?: string;
-
   @IsNumber()
   @IsOptional()
   updatedBy?: number;

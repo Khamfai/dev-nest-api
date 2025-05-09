@@ -40,38 +40,6 @@ export class CreateCustomerDto {
 }
 
 export class UpdateCustomerDto extends PartialType(CreateCustomerDto) {
-  @IsString()
-  @IsOptional()
-  name?: string;
-
-  @IsNumber()
-  @IsOptional()
-  shopId?: number;
-
-  @IsString()
-  @IsOptional()
-  tel?: string;
-
-  @IsString()
-  @IsOptional()
-  email?: string;
-
-  @IsNumber()
-  @IsOptional()
-  prId?: number;
-
-  @IsNumber()
-  @IsOptional()
-  drId?: number;
-
-  @IsNumber()
-  @IsOptional()
-  villId?: number;
-
-  @IsNumber()
-  @IsOptional()
-  score?: number;
-
   @IsNumber()
   @IsOptional()
   updatedBy?: number;

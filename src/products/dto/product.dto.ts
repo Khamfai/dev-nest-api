@@ -40,6 +40,10 @@ export class CreateProductDto {
 
   @IsBoolean()
   @IsOptional()
+  hasStock: boolean;
+
+  @IsBoolean()
+  @IsOptional()
   isSet?: boolean;
 
   @IsBoolean()
@@ -56,42 +60,6 @@ export class CreateProductDto {
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {
-  @IsString()
-  @IsOptional()
-  name?: string;
-
-  @IsNumber()
-  @IsOptional()
-  catId?: number;
-
-  @IsString()
-  @IsOptional()
-  barcode?: string;
-
-  @IsNumber()
-  @IsOptional()
-  cost?: number;
-
-  @IsNumber()
-  @IsOptional()
-  price?: number;
-
-  @IsEnum($Enums.ProductUnit)
-  @IsOptional()
-  unit?: $Enums.ProductUnit;
-
-  @IsBoolean()
-  @IsOptional()
-  isSet?: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  isCF?: boolean;
-
-  @IsString()
-  @IsOptional()
-  pic?: string;
-
   @IsNumber()
   @IsOptional()
   updatedBy?: number;

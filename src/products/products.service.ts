@@ -26,9 +26,13 @@ export class ProductsService implements CRUD<Products> {
       include: {
         categories: true,
         stocks: {
-          where: { remaining: { gt: 0 }, isDeleted: false },
-          take: 2,
-          orderBy: { createdAt: 'desc' },
+          where: {
+            remaining: { gt: 0 },
+            expDate: { gt: Date.now() },
+            isDeleted: false,
+          },
+          take: 5,
+          orderBy: { createdAt: 'asc' },
         },
       },
       where: { shopId, isDeleted: false },
@@ -44,7 +48,7 @@ export class ProductsService implements CRUD<Products> {
         stocks: {
           where: { isDeleted: false },
           take: 2,
-          orderBy: { createdAt: 'desc' },
+          orderBy: { createdAt: 'asc' },
         },
       },
       where: { id },
